@@ -1,0 +1,67 @@
+.fretboard {
+  background: #330000;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.string-row {
+  display: flex;
+  margin-bottom: 4px;
+  flex-direction: row; /* ← これを切り替える */
+}
+.string-row.reversed {
+  flex-direction: row-reverse;
+}
+
+.fret {
+  width: 40px;
+  height: 40px;
+  background: #eee;
+  margin-right: 4px;
+  border-radius: 6px;
+  line-height: 40px;
+  text-align: center;
+  font-family: monospace;
+}
+.fretboard-container {
+  margin-bottom: 20px;
+  text-align: center;
+}
+.fret-numbers {
+  display: flex;
+  margin-bottom: 8px;
+  justify-content: center;
+}
+.reverse-btn {
+  margin-top: 10px;
+  padding: 6px 12px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #888;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.fret-number {
+  width: 40px; /* ← .fret と揃える */
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  font-weight: bold;
+  font-family: monospace;
+  color: #444;
+  background-color: #f0f0f0;
+  border-radius: 6px;
+  margin-right: 4px;
+}
+
+/* 左右反転用 */
+.fretboard-container.reversed .string-row {
+  flex-direction: row-reverse;
+}
+
+.fretboard-container.reversed .fret-numbers {
+  flex-direction: row-reverse;
+}
