@@ -1,0 +1,10 @@
+.settings-panel {
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+.settings-panel label {
+  display: block;
+  margin: 8px 0;
+}
