@@ -1,6 +1,12 @@
+.fretboard-container {
+  /* margin-bottom: 20px; */
+  text-align: center;
+  --label-w: 40px;
+  --pad: 10px; 
+}
 .fretboard {
   background: #330000;
-  padding: 10px;
+  padding: var(--pad);
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -9,63 +15,59 @@
 /* 弦の1行 */
 .string-row {
   display: flex;
-  gap: 4px; /* margin-right ではなく gap 推奨（反転時に崩れにくい） */
-  /* margin-bottom: 4px;
-  flex-direction: row; ← これを切り替える
-  align-items: center; */
+  gap: 4px; 
+  /* margin-right ではなく gap 推奨（反転時に崩れにくい） */
+
 }
 .string-row.reversed {
   flex-direction: row-reverse;
 }
 /* 弦番号（横のラベル） */
 .string-label {
-   width: var(--label-w);
-   /* width: 40px;              弦番号の固定幅 */
-    margin: 4px;
+   width: var(--label-w, 40px); /* 変数 or デフォルト40px */
+    /* margin: 4px; */
    display: grid;
    place-items: center;
-   /* display: flex; */
-   /* align-items: center;
-   justify-content: center; */
    font-weight: bold;
-   background: #fafafa;
+   background: #009dff;
 }
-/* .string-label {
-  width: 50px;
-  text-align: right;
-  padding-right: 8px;
-  font-weight: bold;
-} */
 
+
+/* フレット番号行（上段） */
+.fret-numbers {
+  display: flex;
+  gap: 4px;
+  /* ← 左利き用 */
+  margin-left: var(--label-w, 40px); 
+  padding-inline: var(--pad); 
+  padding-left: 14px;
+}
+.fret-number {
+  width: 40px; /* ← .fret と揃える */
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 18px;
+  font-family: monospace;
+  color: #444444;
+  background-color: yellow;
+  border-radius: 6px;
+
+  /* margin-right: 2px;
+  margin-left: 2px; */
+}
 .fret {
   width: 40px;
   height: 40px;
+  font-size: 18px;
   background: #eee;
-  margin-right: 4px;
   border-radius: 6px;
   line-height: 40px;
   text-align: center;
   font-family: monospace;
 }
-/* 変数：弦番号ラベルの幅 */
-.fretboard-container {
-  margin-bottom: 20px;
-  text-align: center;
-  --label-w: 70px;
-}
-/* フレット番号行（上段） */
-.fret-numbers {
-  display: flex;
-  gap: 4px;
-  /* 通常は左に弦ラベル分の余白 */
-  margin-left: var(--label-w);
-}
-/* .fret-numbers {
-  display: flex;
-  margin-left: 40px;  
-  margin-bottom: 8px;
-  justify-content: center;
-} */
+
 .reverse-btn {
   margin-top: 10px;
   padding: 6px 12px;
@@ -76,27 +78,18 @@
   cursor: pointer;
 }
 
-.fret-number {
-  width: 40px; /* ← .fret と揃える */
-  height: 40px;
-  line-height: 40px;
-  text-align: center;
-  font-weight: bold;
-  font-family: monospace;
-  color: #444;
-  background-color: #f0f0f0;
-  border-radius: 6px;
-  margin-right: 4px;
-}
 
 /* 左右反転用 */
+/* 反転トグルは親に付ける */
 .fretboard-container.reversed .string-row {
   flex-direction: row-reverse;
 }
 
 .fretboard-container.reversed .fret-numbers {
-    flex-direction: row-reverse;   /* 数字の並びも反転 */
+  flex-direction: row-reverse;   /* 数字の並びも反転 */
   /* 反転時は右に余白を付ける（ズレ解消の肝） */
   margin-left: 0;
-  margin-right: var(--label-w);
+  margin-right: var(--label-w, 40px); 
+  /* ← ラベル分を右にオフセット */
+  padding-right: 14px;  /* ← 左利き時は逆側にオフセット */
 }

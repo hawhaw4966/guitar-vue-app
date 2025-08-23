@@ -1,5 +1,5 @@
 <template>
-  <div class="fretboard-container" >
+  <div class="fretboard-container" :class="{ reversed: isReversed }">
     <!-- フレット番号 -->
     <div class="fret-numbers">
       <div
@@ -10,7 +10,7 @@
         {{ f }}
       </div>
     </div>
-
+ 
     <!-- フレットボード -->
     <div class="fretboard">
       <div
@@ -18,27 +18,33 @@
         :key="sIndex"
          class="string-row"
       >
-       <!-- 弦番号セル -->
-        <!-- <div class="string-label">
-        {{ sIndex +1}}弦
-        </div> -->
-          <template v-if="!isReversed">
-          <div class="string-label">{{sIndex +1}}弦</div>
-         </template>
-       <!-- フレット音名 -->
-        <div
-        v-for="(fret, fIndex) in displayFrets"
-        :key="fIndex"
-        class="fret"
-       >
-      {{ getNoteName(string, fret) }}
-      </div>
-       <template v-if="isReversed">
-    <div class="string-label">{{ sIndex +1 }}弦</div>
-  </template>
-    </div>
+<div class="string-row">
+  <!-- 弦番号セルは常に一個だけ、先頭に置く -->
+  <div class="string-label">{{ sIndex + 1 }}弦</div>
 
- </div>
+  <!-- フレットは「昇順のまま」並べる（JSでreverseしない） -->
+  <div v-for="f in displayFrets" :key="f" class="fret">
+    {{ getNoteName(string, f) }}
+  </div>
+</div>
+       <!-- 弦番号セル左 -->
+          <!-- <template v-if="!isReversed">
+          <div class="string-label">{{sIndex +1}}弦</div>
+         </template> -->
+       <!-- フレット音名 -->
+         <!-- <div
+          v-for="(fret, fIndex) in displayFrets"
+          :key="fIndex"
+          class="fret"
+          >
+          {{ getNoteName(string, fret) }}
+         </div> -->
+       <!-- 弦番号セル右 -->
+       <!-- <template v-if="isReversed">
+        <div class="string-label">{{ sIndex +1 }}弦</div>
+       </template> -->
+    </div>
+  </div>
 
 
     <!-- ボタン -->
@@ -66,29 +72,21 @@ const stringsArray = computed(() =>
   Array.from({ length: props.strings }, (_, i) => props.tuning[i] ?? 4)
 );
 
-// const displayFrets = computed(() =>
-//   Array.from({ length: props.frets + 1 }, (_, i) => i)
-// );
-
 const displayFrets = computed(() => {
   const frets = Array.from({ length: props.frets + 1 }, (_, i) => i);
-  return isReversed.value ? frets.reverse() : frets;
+  return  frets;
 });
 
 function getNoteName(openNote, fret) {
   return noteNames[(openNote + fret) % 12];
 }
-// function getNoteName(openNote, fret) {
-//   const key = (openNote + fret) % 12;
-//   return noteNames[key];
-// }
 
-const displayStrings = computed(() => {
-  return isReversed.value
-    ? [...stringsArray.value].reverse()
-    : stringsArray.value;
-});
 // const displayStrings = computed(() => {
-//   return [...stringsArray.value]; // ← 上から1弦
+//   return isReversed.value
+//     ? [...stringsArray.value].reverse()
+//     : stringsArray.value;
 // });
+const displayStrings = computed(() => {
+  return [...stringsArray.value]; // ← 上から1弦
+});
 </script>

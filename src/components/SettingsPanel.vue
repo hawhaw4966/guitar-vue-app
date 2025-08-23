@@ -14,21 +14,8 @@ const emit = defineEmits(['update:strings', 'update:frets', 'update:tuning']);//
 // 弦数・フレット数は即時反映（v-model でも @input でもOK）
 function onStrings(e) { emit('update:strings', Number(e.target.value)); }
 function onFrets(e)   { emit('update:frets',   Number(e.target.value)); }
-// function onStringsChange(e) {
-//   emit('update:strings', Number(e.target.value));
-// }
 
-// function onFretsChange(e) {
-//   emit('update:frets', Number(e.target.value));
-// }
-
-// const localStrings = ref(props.strings);
-
-// 開放音はローカルに一旦保持（ステージング）
 const localTuning = ref([...props.tuning]); 
-// const localFrets = ref(props.frets);
-// const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
-
 
 // 親から確定値が変わったら UI も追随（手動で巻き戻したい時に備える）
 watch(() => props.tuning, (nv) => { localTuning.value = [...nv]; }, { deep: true });
@@ -57,13 +44,6 @@ function applyTuning() {
      <label>弦数: <input type="number" :value="strings" @input="onStrings" min="4" max="8" /></label>
     <label>フレット数: <input type="number" :value="frets" @input="onFrets" min="18" max="27" /></label>
 
-    <!-- <label>弦数:
-      <input type="number" :value="props.strings" @input="onStringsChange" />
-    </label>
-    <label>フレット数:
-      <input type="number" :value="props.frets" :v-model.number="localFrets" min="18" max="24" @input="onFretsChange" />
-    </label> -->
-
      <div v-for="(v, i) in localTuning" :key="i">
       <label>弦{{ i + 1 }}の開放音:
           <select :value="v" @change="onChangeTuning(i, $event)">
@@ -72,13 +52,10 @@ function applyTuning() {
             {{ ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'][n-1] }}
           </option>
          </select>
-        <!-- <select v-model.number="localTuning[i]">
-          <option v-for="(n, idx) in noteNames" :value="idx">{{ n }}</option>
-        </select> -->
+     
       </label>
     </div>
     <button @click="applyTuning">適用</button>
-    <!-- <button @click="applyChanges">適用</button> -->
   </div>
 </template>
 
