@@ -17,8 +17,8 @@
     />
     
     <!-- <SettingsPanel
-    v-modelを使わない場合
     :strings="strings" @update:strings="strings = $event"
+    v-modelを使わない場合
     :frets="frets"     @update:frets="frets = $event"
       :tuning="tuning"
       @update-tuning="tuning = $event"
