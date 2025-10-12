@@ -6,6 +6,7 @@
 }
 .settings-panel label {
   display: block;
+  
   margin: 8px 0;
 }
 .tuning {
@@ -23,3 +24,16 @@
   cursor: pointer;
 }
 .note { opacity: .7; font-family: monospace; }
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+button {
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #f5f5f5;
+  cursor: pointer;
+}

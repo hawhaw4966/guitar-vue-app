@@ -1,92 +1,83 @@
 <template>
-  <div class="fretboard-container" :class="{ reversed: isReversed }">
+ <div class="fretboard-container" :class="{ reversed: isReversed }">
+    
     <!-- フレット番号 -->
     <div class="fret-numbers">
-      <div
-        v-for="f in displayFrets"
-        :key="'fret-' + f"
-        class="fret-number"
-      >
+      <div v-for="f in fretsArray" :key="'fret-' + f" class="fret-number">
         {{ f }}
       </div>
     </div>
- 
     <!-- フレットボード -->
     <div class="fretboard">
-      <div
-        v-for="(string, sIndex) in displayStrings"
-        :key="sIndex"
+       <!-- 各弦 -->
+       <div
+         v-for="(string, sIndex) in displayStrings"
+         :key="sIndex"
          class="string-row"
-      >
-<div class="string-row">
-  <!-- 弦番号セルは常に一個だけ、先頭に置く -->
-  <div class="string-label">{{ sIndex + 1 }}弦</div>
-
-  <!-- フレットは「昇順のまま」並べる（JSでreverseしない） -->
-  <div v-for="f in displayFrets" :key="f" class="fret">
-    {{ getNoteName(string, f) }}
+         >
+        <div class="string-row">
+              <!-- 弦番号セルは常に一個だけ、先頭に置く -->
+           <div class="string-label">{{ sIndex + 1 }}弦</div>
+           <div
+            v-for="(midi, fIndex) in string"
+            :key="fIndex"
+            class="fret"
+            >
+             {{ formatNote(midi, props.displayMode) }}
+           </div>
+        </div>
+      </div>
   </div>
-</div>
-       <!-- 弦番号セル左 -->
-          <!-- <template v-if="!isReversed">
-          <div class="string-label">{{sIndex +1}}弦</div>
-         </template> -->
-       <!-- フレット音名 -->
-         <!-- <div
-          v-for="(fret, fIndex) in displayFrets"
-          :key="fIndex"
-          class="fret"
-          >
-          {{ getNoteName(string, fret) }}
-         </div> -->
-       <!-- 弦番号セル右 -->
-       <!-- <template v-if="isReversed">
-        <div class="string-label">{{ sIndex +1 }}弦</div>
-       </template> -->
-    </div>
-  </div>
-
-
-    <!-- ボタン -->
+      <!-- 左右反転ボタン -->
     <button @click="isReversed = !isReversed" class="reverse-btn">
       {{ isReversed ? "右利き表示" : "左利き表示" }}
     </button>
   </div>
 </template>
 
+
 <script setup>
-import { ref, computed } from 'vue';
+import { ref,computed } from 'vue'
 import '../styles/fretboard.css';
 
 const props = defineProps({
   strings: Number,
   frets: Number,
-  tuning: Array, // 親からの確定値を受け取る
+  tuning: Array,       // 各弦の開放弦MIDI番号
+  displayMode: String, // 'note' | 'note+octave' | 'midi'
+  isReversed: Boolean
 });
 
 const isReversed = ref(false);
 
-const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+// 12音階
+const NOTE_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
 
-const stringsArray = computed(() =>
-  Array.from({ length: props.strings }, (_, i) => props.tuning[i] ?? 4)
-);
-
-const displayFrets = computed(() => {
-  const frets = Array.from({ length: props.frets + 1 }, (_, i) => i);
-  return  frets;
-});
-
-function getNoteName(openNote, fret) {
-  return noteNames[(openNote + fret) % 12];
+// 表示文字を変換する関数
+function formatNote(midi, mode) {
+  if (mode === 'midi') return midi
+  const name = NOTE_NAMES[midi % 12]
+  const octave = Math.floor(midi / 12) - 1
+  if (mode === 'note') return name
+  if (mode === 'note+octave') return `${name}${octave}`
+  return midi
 }
 
-// const displayStrings = computed(() => {
-//   return isReversed.value
-//     ? [...stringsArray.value].reverse()
-//     : stringsArray.value;
-// });
+// フレット番号配列
+const fretsArray = computed(() =>
+  Array.from({ length: props.frets + 1 }, (_, i) => i)
+)
+
+// 弦ごとの開放弦MIDIから全フレットの音を計算
+const stringsArray = computed(() =>
+  Array.from({ length: props.strings }, (_, i) => {
+    const openMidi = props.tuning[i]
+    return fretsArray.value.map(fret => openMidi + fret)
+  })
+)
 const displayStrings = computed(() => {
   return [...stringsArray.value]; // ← 上から1弦
 });
+
 </script>
+

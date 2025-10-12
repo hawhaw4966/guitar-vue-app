@@ -1,71 +1,70 @@
 <template>
-  <div class="app">
+<div class="app">
+  <main>
     <h2>ギターフレットボード</h2>
-    <!-- <Fretboard :strings="6" :frets="24" /> -->
-  </div>
-    <!-- 設定パネルの表示切替ボタン -->
+     <!-- 設定パネルの表示切替ボタン -->
     <button @click="showSettings = !showSettings" class="settings-toggle">
       {{ showSettings ? "設定を隠す" : "設定を開く" }}
     </button>
-  <div>
     <SettingsPanel
      v-if="showSettings"
-     v-model:strings="strings"
-     v-model:frets="frets"
-     :tuning="tuning"
-    @apply:tuning="applyTuning"
+      v-model:strings="strings"
+      v-model:frets="frets"
+      v-model:tuning="tuning"
+  
     />
-    
-    <!-- <SettingsPanel
-    :strings="strings" @update:strings="strings = $event"
-    v-modelを使わない場合
-    :frets="frets"     @update:frets="frets = $event"
-      :tuning="tuning"
-      @update-tuning="tuning = $event"
-    /> -->
+
+    <div class="mode-buttons">
+      <button @click="displayMode = 'note'">Note</button>
+      <button @click="displayMode = 'note+octave'">Note + Octave</button>
+      <button @click="displayMode = 'midi'">MIDI</button>
+    </div>
+
     <Fretboard
       :strings="strings"
       :frets="frets"
       :tuning="tuning"
+      :display-mode="displayMode"
+
     />
+   </main>
   </div>
 </template>
 
-<!-- <template>
-  <SettingsPanel
-    :strings="strings"
-    :frets="frets"
-    :tuning="tuning"
-    // 下記ボタンで変更時
-    @update-strings="strings = $event"
-    @update-frets="frets = $event"
-    @update-tuning="tuning = $event"
-  />
-  <Fretboard :strings="strings" :frets="frets" :tuning="tuning" />
-</template> -->
-
 <script setup>
-import { ref } from 'vue';
-import Fretboard from './components/Fretboard.vue';
-import SettingsPanel from './components/SettingsPanel.vue';
+import { ref } from 'vue'
+import Fretboard from './components/Fretboard.vue'
+import SettingsPanel from './components/SettingsPanel.vue'
 
-const strings = ref(6);
-const frets = ref(24);
-const tuning = ref([4, 11, 7, 2, 9, 4,11,6]); // E B G D A E B
+const strings = ref(6)
+const frets = ref(24)
+// MIDIノートでチューニングを初期化（ E B G D A E B F#）
+const tuning = ref([64, 59, 55, 50, 45, 40, 35, 30])
+// 表示モード: 'note', 'note+octave', 'midi'
+const displayMode = ref('note')
 
-function applyTuning(next) {
-  // 参照を置き換えるのが肝心（中身を直接いじらない）
-  tuning.value = [...next];
-}
+const isReversed = ref(false)   // ← ここで管理
+
+// function applyTuning(newTuning) {
+//   tuning.value = [...newTuning]
+// } 非v-model用
+
 // 設定パネルの表示状態
 const showSettings = ref(false);
 </script>
 
-<style>
-body {
-  font-family: sans-serif;
-  margin: 20px;
-  background: #f5f5f5;
+<style scoped>
+.mode-buttons {
+  display: flex;
+  gap: 12px;
+  margin: 12px 0;
+}
+button {
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #f8f8f8;
+  cursor: pointer;
 }
 .settings-toggle {
   margin-bottom: 1rem;
@@ -76,8 +75,3 @@ body {
   cursor: pointer;
 }
 </style>
-
-
-
-
-
