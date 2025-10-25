@@ -1,14 +1,18 @@
 <script setup>
 import '../styles/settingspanel.css';
 
+const strings = defineModel('strings', { type: Number, default: 6 })
+const frets   = defineModel('frets',   { type: Number, default: 24 })
+const tuning  = defineModel('tuning',  { type: Array,  default: () => [] })
+// 双方向バインディングでフレットボードと連動
+const isReversed = defineModel('isReversed', { type: Boolean, default: false })
+// const props = defineProps({
+//   strings: Number,
+//   frets: Number,
+//   tuning: Array,
+// })
 
-const props = defineProps({
-  strings: Number,
-  frets: Number,
-  tuning: Array,
-})
-
-const emit = defineEmits(['update:strings', 'update:frets', 'update:tuning'])
+// const emit = defineEmits(['update:strings', 'update:frets', 'update:tuning'])
 
 // const isReversed = defineModel('isReversed', { type: Boolean, default: false })
 
@@ -37,9 +41,10 @@ function getOptions(current) {
         type="number"
         min="4"
         max="8"
-        :value="props.strings"
-        @input="emit('update:strings', Number($event.target.value))"
-      />
+        v-model.number="strings"
+        />
+        <!-- :value="strings"
+        @input="emit('update:strings', Number($event.target.value))" -->
     </div>
     <div class="row">
       <label>フレット数:</label>
@@ -47,28 +52,32 @@ function getOptions(current) {
         type="number"
         min="18"
         max="36"
-        :value="props.frets"
-        @input="emit('update:frets', Number($event.target.value))"
-      />
+        v-model.number="frets"
+        />
+        <!-- :value="frets"//旧タイプ
+        @input="emit('update:frets', Number($event.target.value))" -->
     </div>
     <div class="tuning">
       <h4>チューニング</h4>
       <div
         class="tuning-row"
-        v-for="(midi, i) in props.tuning"
+        v-for="(midi, i) in tuning"
         :key="i"
       >
         <label>弦{{ i + 1 }}:</label>
-        <select
+        
+          <!-- ▼ tuning[i] と直接バインド -->
+        <select v-model.number="tuning[i]">
+
+        <!-- <select
           :value="midi"
           @change="
             emit('update:tuning', [
-              ...props.tuning.slice(0, i),
+              ...tuning.slice(0, i),
               Number($event.target.value),
-              ...props.tuning.slice(i + 1)
-            ])
-          "
-         >
+              ...tuning.slice(i + 1)
+            ]) "
+         > -->
           <option
             v-for="m in getOptions(midi)"
             :key="m"
@@ -79,6 +88,10 @@ function getOptions(current) {
         </select>
       </div>
     </div>
+        <!-- 左右反転ボタン -->
+           <button @click="isReversed = !isReversed" class="reverse-btn">
+                 {{ isReversed ? '右利き表示' : '左利き表示' }}
+           </button>
   </section>
 </template>
 

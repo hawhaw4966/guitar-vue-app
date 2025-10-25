@@ -11,7 +11,7 @@
       v-model:strings="strings"
       v-model:frets="frets"
       v-model:tuning="tuning"
-  
+      v-model:isReversed="isReversed"
     />
 
     <div class="mode-buttons">
@@ -25,7 +25,7 @@
       :frets="frets"
       :tuning="tuning"
       :display-mode="displayMode"
-
+      :is-reversed="isReversed"
     />
    </main>
   </div>
@@ -42,8 +42,8 @@ const frets = ref(24)
 const tuning = ref([64, 59, 55, 50, 45, 40, 35, 30])
 // 表示モード: 'note', 'note+octave', 'midi'
 const displayMode = ref('note')
-
-const isReversed = ref(false)   // ← ここで管理
+// 左右反転の状態をApp.vueで管理
+const isReversed = ref(false)   
 
 // function applyTuning(newTuning) {
 //   tuning.value = [...newTuning]

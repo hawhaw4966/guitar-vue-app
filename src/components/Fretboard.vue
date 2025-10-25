@@ -1,5 +1,5 @@
 <template>
- <div class="fretboard-container" :class="{ reversed: isReversed }">
+ <div class="fretboard-container" :class="{ reversed: props.isReversed }">
     
     <!-- フレット番号 -->
     <div class="fret-numbers">
@@ -26,12 +26,13 @@
              {{ formatNote(midi, props.displayMode) }}
            </div>
         </div>
+        
       </div>
-  </div>
+   </div>
       <!-- 左右反転ボタン -->
-    <button @click="isReversed = !isReversed" class="reverse-btn">
+    <!-- <button @click="isReversed = !isReversed" class="reverse-btn">
       {{ isReversed ? "右利き表示" : "左利き表示" }}
-    </button>
+    </button> -->
   </div>
 </template>
 
