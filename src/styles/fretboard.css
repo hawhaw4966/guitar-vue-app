@@ -3,6 +3,8 @@
   text-align: center;
   --label-w: 40px;
   --pad: 10px; 
+  background-color:rgba(128, 128, 128, 0.259);
+  padding-bottom: 4px;
 }
 .fretboard {
   background: #330000;
@@ -41,6 +43,9 @@
   margin-left: var(--label-w, 40px); 
   padding-inline: var(--pad); 
   padding-left: 14px;
+  padding-top: 4px;
+  padding-bottom: 2px;
+ 
 }
 .fret-number {
   width: 40px; /* ← .fret と揃える */
@@ -51,7 +56,7 @@
   font-size: 18px;
   font-family: monospace;
   color: #444444;
-  background-color: yellow;
+  background-color:#2b7cff;
   border-radius: 6px;
 
   /* margin-right: 2px;
@@ -92,4 +97,41 @@
   margin-right: var(--label-w, 40px); 
   /* ← ラベル分を右にオフセット */
   padding-right: 14px;  /* ← 左利き時は逆側にオフセット */
+}
+
+/* 既存スタイルはそのまま。ハイライトのみ追加 */
+.fret.highlight {
+  outline: 2px solid #2b7cff;
+  background: rgb(9, 240, 159);
+  box-shadow: inset 0 0 0 1px rgba(43,124,255,.35);
+  font-weight: 600;
+}
+ /* コードトーン */
+.fret.in-chord {        
+  outline: 2px solid #28a745;
+  background: rgb(254, 250, 3);
+  font-weight: 600;
+}
+/* ルートとコードトーンが重なる場合を少し強調してもOK */
+.fret.highlight.in-chord {
+   outline: 2px solid #2b7cff;
+  background: rgb(9, 240, 159);
+}
+.fret.highlight.in-scale {
+   outline: 2px solid #2b7cff;
+  background: rgb(9, 240, 159);
+}
+/* .fret.in-chord,
+.string-row .fret.in-chord {
+  outline: 2px solid #28a745 !important;
+  background: rgba(40,167,69,.25) !important;
+  font-weight: 700;
+} */
+
+.fret.in-scale {
+  outline: 2px solid #7b3cff;
+  background: rgba(5, 221, 221, 0.894);
+}
+.fret.in-chord.in-scale {
+  background: rgba(9, 227, 60, 0.872);
 }
